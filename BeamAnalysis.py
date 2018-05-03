@@ -3,9 +3,11 @@ import numpy as np
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib import pyplot as plt
+#from pprint import pprint
 
 #TODO:
-#   Bulletproof anti crash checking
+#   Bulletproof anti crash checking (move from bool about loading/supports to checking array)
+#   Add shear/moment/deflection diagrams
 #   Add editing of loading, supports, and beam length
 #   distributed load across support
 
@@ -850,6 +852,14 @@ class Application(Frame):
                 else:
                     cumX = spanLength[i]
 
+            for i in range(0, len(spanForceMatrix)+1):
+
+                Label(self.master, text="Support " + str(i+1) + " reaction is " + str(float(globalForceMatrix[(2*i)])) + " kips").place(x=350, y=150 + (25*(4*i)), anchor="center")
+                Label(self.master, text="Support " + str(i + 1) + " moment is " + str(float(globalForceMatrix[(2 * i)+1])) + " kip*in").place(x=350, y=175 + (25 * (4*i)), anchor="center")
+
+                Label(self.master, text="Support " + str(i+1) + " vertical deflection is " + str(float(dispMatrix[(2*i)])) + " inches").place(x=350, y=200 + (25*(4*i)), anchor="center")
+                Label(self.master, text="Support " + str(i+1) + " rotation is " + str(float(dispMatrix[(2*i)+1])) + " radians").place(x=350, y=225 + (25*(4*i)), anchor="center")
+
             self.ax1.clear()
             self.ax1.plot(shearX, shearY)
 
@@ -873,11 +883,22 @@ class Application(Frame):
             self.ax2.set_ylabel('M (kips*in)')
             self.ax2.set_xlabel('L (in)')
 
+            maxMoment = max(momentY)
+            xMaxMoment = momentY.index(maxMoment)
+            xPosMaxMoment = momentX[xMaxMoment]
+
+            minMoment = min(momentY)
+            xMinMoment = momentY.index(minMoment)
+            xPosMinMoment = momentX[xMinMoment]
+
             momentX = np.array(momentX, dtype=float)
             momentY = np.array(momentY, dtype=float)
             momentY = momentY.flatten()
 
             self.ax2.fill_between(momentX, np.zeros(len(momentX), dtype=float), momentY, facecolor='blue', alpha=0.2)
+
+            self.ax2.annotate("Max = " + str(maxMoment), xy=(xPosMaxMoment, maxMoment))
+            self.ax2.annotate("Min = " + str(minMoment), xy=(xPosMinMoment, minMoment))
 
             #print(dispMatrix)
             #print(globalForceMatrix)
