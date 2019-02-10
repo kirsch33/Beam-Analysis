@@ -566,14 +566,7 @@ class Application(Frame):
                     globalModifiedStiffnessMatrix = globalStiffnessMatrix
                     globalModifiedFixedEndMatrix = globalFixedEndMatrix
 
-                    if (self.SupportTypeArray[0] == "Free"):
-
-                        if (self.SupportTypeArray[1] == "Simple") or (self.SupportTypeArray[1] == "Roller"):
-                            globalModifiedStiffnessMatrix = np.delete(globalModifiedStiffnessMatrix, (2), axis=0)
-                            globalModifiedStiffnessMatrix = np.delete(globalModifiedStiffnessMatrix, (2), axis=1)
-                            globalModifiedFixedEndMatrix = np.delete(globalModifiedFixedEndMatrix, (2), axis=0)
-
-                    elif (self.SupportTypeArray[0] == "Fixed"):
+                    if (self.SupportTypeArray[0] == "Fixed"):
 
                         globalModifiedStiffnessMatrix = np.delete(globalModifiedStiffnessMatrix, (0), axis=0)
                         globalModifiedStiffnessMatrix = np.delete(globalModifiedStiffnessMatrix, (0), axis=1)
